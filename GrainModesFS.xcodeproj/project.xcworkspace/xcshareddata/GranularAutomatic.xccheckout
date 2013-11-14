@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>B55EB9B8-C00D-4FDD-A8C2-D6F5A5FB48BF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>GranularAutomatic</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>AEB509BF-73DB-4C80-B12E-6FFCF884726F</key>
+		<string>https://github.com/JavierVillegas/GranAutomatic.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>GranularAutomatic.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>AEB509BF-73DB-4C80-B12E-6FFCF884726F</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/JavierVillegas/GranAutomatic.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>AEB509BF-73DB-4C80-B12E-6FFCF884726F</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>AEB509BF-73DB-4C80-B12E-6FFCF884726F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>GranAutomatic2</string>
+		</dict>
+	</array>
+</dict>
+</plist>
