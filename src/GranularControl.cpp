@@ -1,8 +1,11 @@
 #include "testApp.h"
 
-
+//const int Nx = 480;
+//const int Ny = 360;
 const int Nx = 352;
 const int Ny = 288;
+//const int Nx = 640;
+//const int Ny = 480;
 // A vector with all the frames.
 vector <cv::Mat> TheFramesInput;
 
@@ -165,9 +168,9 @@ void testApp::setup(){
 //    UpdateSchedulerUpDown(TheUf,1);
     ofSetLogLevel(OF_LOG_VERBOSE);
     vidGrabber1.listDevices();
-    vidGrabber1.setDeviceID(1);
+    vidGrabber1.setDeviceID(0);
     vidGrabber1.initGrabber(Nx,Ny);
-    vidGrabber2.setDeviceID(0);
+    vidGrabber2.setDeviceID(1);
     vidGrabber2.initGrabber(Nx,Ny);
 
     //vidGrabber.initGrabber(Nx,Ny);
@@ -222,12 +225,13 @@ void testApp::setup(){
     // load cascade detector files
     
     //-- 1. Load the cascades
-    if( !face_cascade.load( "/Users/jvillegas/of_v0.7.4_osx_release/apps/myApps/GrainModesFS/haarcascade_frontalface_alt_tree.xml" ) ){
-        // if( !face_cascade.load( "/Users/javiervillegas/of_v0.7.4_osx_release/apps/myApps/FaceCenter/haarcascade_mcs_eyepair_big.xml" ) ){
-        //  if( !face_cascade.load( "/Users/javiervillegas/of_v0.7.4_osx_release/apps/myApps/FaceCenter/haarcascade_mcs_nose.xml" ) ){
-        
-        cout<<"--(!)Error loading cara \n"<<endl;
-    };
+//    if( !face_cascade.load("/Users/javiervillegas/of_v0.7.4_osx_release/apps/myApps/GranFS/haarcascade_frontalface_alt_tree.xml"
+//       ) ){
+//        // if( !face_cascade.load( "/Users/javiervillegas/of_v0.7.4_osx_release/apps/myApps/FaceCenter/haarcascade_mcs_eyepair_big.xml" ) ){
+//        //  if( !face_cascade.load( "/Users/javiervillegas/of_v0.7.4_osx_release/apps/myApps/FaceCenter/haarcascade_mcs_nose.xml" ) ){
+//        
+//        cout<<"--(!)Error loading cara \n"<<endl;
+//    };
     
     
     int Osamp = (int)(ceil(Gs*inOp/100.0));
@@ -252,6 +256,9 @@ void testApp::setup(){
 //--------------------------------------------------------------
 
 void testApp::update(){
+    
+    
+   // cout<<ofGetFrameRate()<<endl;
     
     // setups for each piece
     switch (ModeSelector) {
@@ -284,22 +291,21 @@ void testApp::update(){
             SelectionMode =1;
         
             boolGeomGrains = false;
-            boolhueshift = true;
+            boolhueshift = false;
             boolSatChange = false;
             
             boolRotGrains = false;
             boolDelaygrains = true;
             boolShiftGrain = false;
             boolCam2Grain = false;
-            boolSatChange = true;
+            boolSatChange = false;
             
             
             DelayMode = 1;
-            HueMode = 1;
+
 
             SLD2 = 6;
-            SLD3 = 73;
-            SLD4 = 59;
+         
             
       
             break;
@@ -433,7 +439,7 @@ void testApp::update(){
             boolhueshift = false;
             boolSatChange = false;
             
-            boolRotGrains = false;
+            boolRotGrains = true;
             boolDelaygrains = true;
             boolShiftGrain = false;
             boolCam2Grain = false;
@@ -441,10 +447,11 @@ void testApp::update(){
             
             GeomMode = 2;
             DelayMode = 1;
+            RotMode = 2;
             
-            
+            SLD1 = 32;
             SLD5 = 125;
-            SLD2 = 12;
+            SLD2 = 30;
             
             break;   
             
@@ -471,26 +478,26 @@ void testApp::update(){
             // circular selection
             SelectionMode =5;
             // nonlinear and Hue
-            boolGeomGrains = true;
-            boolhueshift = true;
+            boolGeomGrains = false;
+            boolhueshift = false;
             boolSatChange = true;
             
-            boolRotGrains = false;
+            boolRotGrains = true;
             boolDelaygrains = false;
             boolShiftGrain = false;
             boolCam2Grain = false;
             boolSatChange = false;
             
             // Hue random  Geometrical fixed
-            HueMode = 1;  
+   
             GeomMode = 0;
+            RotMode = 0;
             
             // Slider Values:
-
+            SLD1 = 127;
             SLD5 = 5;
             SLD7 = 47;
-            SLD3 = 65;
-            SLD4 = 59;
+       
             
             break;
             
@@ -501,7 +508,7 @@ void testApp::update(){
             boolhueshift = false;
             boolSatChange = false;
             
-            boolRotGrains = false;
+            boolRotGrains = true;
             boolDelaygrains = false;
             boolShiftGrain = false;
             boolCam2Grain = false;
@@ -509,7 +516,9 @@ void testApp::update(){
             
      
             GeomMode = 0;
+            RotMode = 1;
             
+            SLD1 = 127;
             SLD5 = 39;
             SLD7 = 13;
             
@@ -592,18 +601,18 @@ void testApp::update(){
             break;
                 
             case 4:
-                 detectFace(AuxMat);
-                 for (int g=0; g < GrainMask.size(); g++) {
-                     if((GrainMask[g].x+Gs/2.0>FirstFace.x)&&(GrainMask[g].y+Gs/2.0>FirstFace.y)&&
-                        (GrainMask[g].x+Gs/2.0<(FirstFace.x + FirstFace.width))&&
-                        (GrainMask[g].y+Gs/2.0<(FirstFace.y + FirstFace.height)))
-                        {
-                          GrainMask[g].z = 1.0;
-                        }
-                   else{
-                          GrainMask[g].z = 0.0;
-                        }
-                  }
+//                 detectFace(AuxMat);
+//                 for (int g=0; g < GrainMask.size(); g++) {
+//                     if((GrainMask[g].x+Gs/2.0>FirstFace.x)&&(GrainMask[g].y+Gs/2.0>FirstFace.y)&&
+//                        (GrainMask[g].x+Gs/2.0<(FirstFace.x + FirstFace.width))&&
+//                        (GrainMask[g].y+Gs/2.0<(FirstFace.y + FirstFace.height)))
+//                        {
+//                          GrainMask[g].z = 1.0;
+//                        }
+//                   else{
+//                          GrainMask[g].z = 0.0;
+//                        }
+//                  }
             break;
         
             case 5:
@@ -701,18 +710,16 @@ void testApp::update(){
             
             // Hue and saturation transformations:
             
-            
-            float Ang;
-            if (HueMode ==0) {Ang = SLD3/127.0*2*PI;}
-            if (HueMode ==1) {Ang = ofRandom(SLD3/127.0*2*PI);}
-            if (HueMode ==2) {Ang = sqrtf(CurrentEnergy)*SLD3/127.0*2*PI;}
+   
             
             // Rotation effect
             
-            float RotFact;
+            float RotFact,cosROT, sinROT;
             if (RotMode ==0){RotFact =PI*SLD1/127.0;}
             else if (RotMode ==1){RotFact =ofRandom(PI*SLD1/127.0);}
             else if (RotMode ==2){RotFact =sqrtf(CurrentEnergy)*PI*SLD1/127.0;}
+            cosROT  = cos(RotFact);
+            sinROT = sin(RotFact);
             
          // Geometric distortion
             float GeoAlpha;
@@ -739,9 +746,9 @@ void testApp::update(){
                     float rIn,gIn,bIn;
                     float rOut,gOut,bOut;
                     float Scale;
-                    Scale = ((0.5*0.5*0.5)*(1.0 -cosf(2*PI*x/(float)(Gs-1)))*
-                             (1.0 -cosf(2*PI*y/(float)(Gs-1)))*
-                             (1.0 -cosf(2*PI*(m*(Gs-1)/2.0 +(fc%jp))/(float)(Gs-1))));
+                    Scale = ((0.5*0.5*0.5)*(1.0 -cos(2*PI*x/(float)(Gs-1)))*
+                             (1.0 -cos(2*PI*y/(float)(Gs-1)))*
+                             (1.0 -cos(2*PI*(m*(Gs-1)/2.0 +(fc%jp))/(float)(Gs-1))));
                     // m =0 is the next grain
                     
                     Scale/=(ScaleCorrectFactor*ScaleCorrectFactor*ScaleCorrectFactor);
@@ -769,14 +776,14 @@ void testApp::update(){
                         if (m==1) {
                             float newX = (x + FirstGrains[g].x) - (FirstGrains[g].x+Gs/2.0);
                             float newY = (y + FirstGrains[g].y) - (FirstGrains[g].y+Gs/2.0);
-                            xindIn = (int)(newX*cos(RotFact) - newY*sin(RotFact)) + (FirstGrains[g].x+Gs/2.0);
-                            yindIn = (int)(newX*sin(RotFact) + newY*cos(RotFact)) + (FirstGrains[g].y+Gs/2.0);
+                            xindIn = (int)(newX*cosROT - newY*sinROT) + (FirstGrains[g].x+Gs/2.0);
+                            yindIn = (int)(newX*sinROT + newY*cosROT) + (FirstGrains[g].y+Gs/2.0);
                         }
                         else {
                             float newX = (x + SecondGrains[g].x) - (SecondGrains[g].x+Gs/2.0);
                             float newY = (y + SecondGrains[g].y) - (SecondGrains[g].y+Gs/2.0);
-                            xindIn = (int)(newX*cos(RotFact) - newY*sin(RotFact)) + (SecondGrains[g].x+Gs/2.0);
-                            yindIn = (int)(newX*sin(RotFact) + newY*cos(RotFact)) + (SecondGrains[g].y+Gs/2.0);
+                            xindIn = (int)(newX*cosROT - newY*sinROT) + (SecondGrains[g].x+Gs/2.0);
+                            yindIn = (int)(newX*sinROT + newY*cosROT) + (SecondGrains[g].y+Gs/2.0);
 
                         }
                     
@@ -805,8 +812,8 @@ void testApp::update(){
                         
 
                         
-                        float Rf = sqrtf(2*(newX*newX+newY*newY))/Gs;
-                        float newR = powf(Rf,GeoAlpha);
+                        float Rf = sqrt(2*(newX*newX+newY*newY))/Gs;
+                        float newR = pow(Rf,GeoAlpha);
                     
                         newY = (Rf!=0)?(newR*newY/Rf):0.0;
                         newX = (Rf!=0)?(newR*newX/Rf):0.0;
@@ -850,39 +857,39 @@ void testApp::update(){
                     
                     
 
-                    
-                    if(boolhueshift&&(GrainMask[g].z==1.0)){
-                       // keep ang value
-                    }
-                    else{
-                        Ang =0;
-                    }
-               
-                    float S;
-                    if(boolSatChange&&(GrainMask[g].z==1.0)){
-                      S = 2.1*SLD4/127.0;
-                    }
-                    else{
-                        S = 1.0;
-                    }
-                    float SU = S*cos(Ang);
-                    float SW = S*sin(Ang);
-                    float rMed,gMed,bMed;
-                    
-                  
-                    rMed = (.299+.701*SU+.168*SW)*rIn
-                    + (.587-.587*SU+.330*SW)*gIn
-                    + (.114-.114*SU-.497*SW)*bIn;
-                    gMed = (.299-.299*SU-.328*SW)*rIn
-                    + (.587+.413*SU+.035*SW)*gIn
-                    + (.114-.114*SU+.292*SW)*bIn;
-                    bMed = (.299-.3*SU+1.25*SW)*rIn
-                    + (.587-.588*SU-1.05*SW)*gIn
-                    + (.114+.886*SU-.203*SW)*bIn;
-                   
-                    
-                    // from:
-                    // http://beesbuzz.biz/code/hsv_color_transforms.php
+//                    
+//                    if(boolhueshift&&(GrainMask[g].z==1.0)){
+//                       // keep ang value
+//                    }
+//                    else{
+//                        Ang =0;
+//                    }
+//               
+//                    float S;
+//                    if(boolSatChange&&(GrainMask[g].z==1.0)){
+//                      S = 2.1*SLD4/127.0;
+//                    }
+//                    else{
+//                        S = 1.0;
+//                    }
+//                    float SU = S*cos(Ang);
+//                    float SW = S*sin(Ang);
+//                    float rMed,gMed,bMed;
+//                    
+//                  
+//                    rMed = (.299+.701*SU+.168*SW)*rIn
+//                    + (.587-.587*SU+.330*SW)*gIn
+//                    + (.114-.114*SU-.497*SW)*bIn;
+//                    gMed = (.299-.299*SU-.328*SW)*rIn
+//                    + (.587+.413*SU+.035*SW)*gIn
+//                    + (.114-.114*SU+.292*SW)*bIn;
+//                    bMed = (.299-.3*SU+1.25*SW)*rIn
+//                    + (.587-.588*SU-1.05*SW)*gIn
+//                    + (.114+.886*SU-.203*SW)*bIn;
+//                   
+//                    
+//                    // from:
+//                    // http://beesbuzz.biz/code/hsv_color_transforms.php
                     
                     
                     
@@ -919,9 +926,9 @@ void testApp::update(){
                     rOut = (float)output[3*CurrentOutput.cols * (yindOut) + 3*(xindOut) + 2];
                     
 
-                    output[3*CurrentOutput.cols * (yindOut) + 3*(xindOut) ] = (uchar)(bOut + Scale*(1.0 - boolShiftGrain*.5)*bMed);
-                    output[3*CurrentOutput.cols * (yindOut) + 3*(xindOut) + 1]=(uchar)(gOut +Scale*(1.0 - boolShiftGrain*.5)*gMed);
-                    output[3*CurrentOutput.cols * (yindOut) + 3*(xindOut) + 2]=(uchar)(rOut + Scale*(1.0 - boolShiftGrain*.5)*rMed);
+                    output[3*CurrentOutput.cols * (yindOut) + 3*(xindOut) ] = (uchar)(bOut + Scale*(1.0 - boolShiftGrain*.5)*bIn);
+                    output[3*CurrentOutput.cols * (yindOut) + 3*(xindOut) + 1]=(uchar)(gOut +Scale*(1.0 - boolShiftGrain*.5)*gIn);
+                    output[3*CurrentOutput.cols * (yindOut) + 3*(xindOut) + 2]=(uchar)(rOut + Scale*(1.0 - boolShiftGrain*.5)*rIn);
                     
                     
                 
@@ -1013,7 +1020,7 @@ void InitGrains(){
         int tempo = GrainsRandom[k];
         GrainsRandom[k] = GrainsRandom[indi];
         GrainsRandom[indi] = tempo;
-        cout<<"k: "<<k<<", indi: "<< GrainsRandom[k]<<endl;
+     
     }
     
     
@@ -1364,7 +1371,7 @@ void testApp::audioIn(float *Ainput, int BufferSize, int nChannels){
     EnergyIndy++;
     if (EnergyIndy==4){EnergyIndy=0;}
     for (int k = 0; k<4; k++) {
-        CurrentEnergy+=(SLD8/32.0*SLD8/32.0)*EnergyBuffer[k];
+        CurrentEnergy+=(SLD8/10.0*SLD8/10.0)*EnergyBuffer[k];
     }
     
     

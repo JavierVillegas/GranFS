@@ -4,8 +4,10 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>GranularAutomatic.xcscheme</key>
+		<key>GrainModesFS.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
